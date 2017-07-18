@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>归档列表</title>
+</head>
+<body style="text-align: center;">
+	<div style="margin: 0 auto; height: 1000px; width: 960px;">
+		<table style="width: 960px;">
+			<thead>
+				<tr>
+					<th width="40">序号</th>
+					<th width="120">图片</th>
+					<th width="400">标题</th>
+					<th width="40">价格</th>
+					<th width="40">销量</th>
+					<th width="40">收藏</th>
+					<th width="120">编辑</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list list as w>
+				<tr>
+					<td>${w_index+1}</td>
+					<td><a href="${w.url}" target="_blank"><img alt="" width="100"
+							height="100" src="${w.mainImgUrl}"></a></td>
+					<td width="400">${w.name}</td>
+					<td>${w.price}</td>
+					<td>${w.saleNum}</td>
+					<td>${w.collNum}</td>
+					<td>
+						<a href="/wish/wish/taskDel/${w.id}/${taskId}/${currentPage}">删除</a>
+						<a href="/wish/wish/listAdd/${w.id}/${taskId}/${currentPage}">加入列表</a>
+					</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+		<div>
+			<#if currentPage gt 1> <a
+				href="/wish/wish/taskDataList/${taskId}?currentPage=${currentPage-1}">上一页</a> <#else>
+			首页 </#if>
+			<!-- 
+                                	<#if totalPage gt 1>
+                                		跳转到
+                                		<select onchange="jumpPage()" id="jumpPage">
+                                			<#list 1..totalPage as p>
+                                			<option value="${p}" <#if p==currentPage>selected</#if>>${p}</option>
+                                			</#list>
+                                		</select>
+                                		页
+                                	</#if>  -->
+			<#if currentPage lt totalPage> <a
+				href="/wish/wish/taskDataList/${taskId}?currentPage=${currentPage+1}">下一页</a> <#else>
+			尾页 </#if>
+			
+		</div>
+	</div>
+	<script type="text/javascript" src="/wish/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript">
+		function list(){
+			location.href="/wish/wish/list?isC="+$("#isC").val();
+		}
+		function dl(type){
+			location.href="/wish/wish/wishDataDownLoad?isC="+$("#isC").val()+"&type="+type;
+		}
+	</script>
+</body>
+</html>

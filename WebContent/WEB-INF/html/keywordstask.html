@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>关键词搜索</title>
+</head>
+<body style="text-align: center;">
+	<div style="margin:0 auto; height:1000px;width: 960px;">
+		<!-- <div style="border-color: black;height: 30px;border-style: double;">
+			<input type="text" id="search" value="${key}"> <button onclick="search()">搜索</button>
+		</div> -->
+		<div style="border-color: black;border-style: double;">
+			<div style="height:60px;border-top:#060 2px solid;margin-top:10px;border-bottom:#060 2px solid;background-color:#690;">
+				<!-- <a href="/wish/wish/selectWishData">筛选产品</a>     -->
+			<ul style="list-style:none;line-height:40px;margin-left:50px;">
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/wishDataList" target="_blank">搜索产品</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/add" target="_blank">添加产品</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/list" target="_blank">产品管理</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/keyWordsTask" target="_blank">关键词搜索</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/taskList" target="_blank">我的任务列表</a></li>
+			</ul>
+			</div>
+			<div style="width: 100%;text-align: center;height: 400px">
+				<textarea id="key" rows="20" cols="130" placeholder="输入关键词，多个关键词以逗号结束，最多只抓取五个关键词的信息"></textarea>
+				<button onclick="add()">提交</button>
+			</div>	
+		</div>
+	</div>
+	<script type="text/javascript" src="/wish/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/wish/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript">
+	function add(){
+		var keyWords = $("#key").val().split(',');
+		 for(var i = 0 ;i<keyWords.length;i++){
+		 	if(keyWords[i] == "" || typeof(keyWords[i]) == "undefined"){
+		    	keyWords.splice(i,1);
+		        i = i-1;
+		    }
+		 }
+		console.log(keyWords)
+		
+		if(keyWords.length==0){
+			alert("请填写搜索关键词");
+			return false;
+		}
+		$.ajax({
+			type : "POST",
+			url : "/wish/wish/keyWordsTask",
+			dataType : "json",
+			data : {
+				keyWords :　keyWords,
+				num : 2
+			},
+			beforeSend : function(){
+				alert("正在处理....");
+			},
+			success : function(data) {
+				//alert(data.msg);
+			}
+		});
+	}
+	</script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>筛选产品</title>
+</head>
+<body>
+	<div style="height: 100%;width: 960px;">
+		<div style="border-color: black;height: 100px;border-style: double;">
+			<center>
+				<input type="text" id="search" value="${key}"> <button onclick="search()">搜索</button>
+			</center>
+		</div>
+		<div style="border-color: black;border-style: double;">
+			<div>
+				<!-- <a href="/wish/wish/selectWishData">筛选产品</a>     -->
+				<a href="/wish/wish/wishDataList">搜索产品</a>  
+				<a href="/wish/wish/add">添加产品</a>  
+				<a href="/wish/wish/list">产品管理</a>  
+			</div>
+			<div id="t">
+				<input type="checkbox" <#if hot==1>checked</#if> value="hot"> hot
+				<input type="checkbox" <#if fly==1>checked</#if> value="fly"> fly
+				<input type="checkbox" <#if newhot==1>checked</#if> value="newhot"> newhot
+				<input type="checkbox" <#if newfly==1>checked</#if> value="newfly"> newfly
+				<input type="checkbox" <#if newshophot==1>checked</#if> value="newshophot"> newshophot
+				<input type="checkbox" <#if newshopfly==1>checked</#if> value="newshopfly"> newshopfly
+			</div>
+			<div style="width: 75%;float: left;text-align: center;height: 1200px">
+				<#list dataList as d>
+					<div style="float: left;padding: 10px;border-color: gray;width: 160px;height: 200px;">
+						<div><img width="150px" height="150px" alt="" src="${d.display_picture}"></div>
+						<div id="c">${d.price}<input type="checkbox" value="${d.itemId}"/></div>
+						<div>${d.feed_tile_text}</div>
+					</div>
+				</#list>
+				<div style="clear: both;">
+					<a href="javascript:prePage()">上一页</a>， <a href="javascript:nextPage()">下一页</a>
+				</div>		
+			</div>	
+				
+			<!-- <div style="width: 20%;float: right;height: 1000px;margin-right: 10px;border-color: black;border-style: double;overflow: auto;">
+				<div id="my">
+					<#list list as temp>
+						<div id="p" style="border-bottom-style: dotted;">
+							<img width="50px" height="50px" alt="" src="${temp.display_picture}"> 
+							<span>
+							${temp.price} <br>
+							${temp.feed_tile_text} 
+							</span>
+							<a href="javascript:del('${temp.itemId}')">删除</a>
+						</div>
+					</#list>
+				</div>
+				<div>以选中<span id="t">${list?size}</span>条数据</div>
+				<div><a href="">WISH下载</a>	SKT下载  全部下载</div>
+			</div> -->
+		</div>
+	</div>
+	<script type="text/javascript" src="/wish/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/wish/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript">
+		function search(){
+		/* 	if($("#search").val()=="")
+				alert("请输入关键词");
+			else
+				location.href="/wish/wishDataList?key="+$("#search").val(); */
+		}
+		
+		var currentPage = ${currentPage}
+		function del(itemId){
+			$.ajax({
+				type : "GET",
+				url : "/wish/wish/simpleDataDel/"+itemId,
+				dataType : "json",
+				data : {
+					type : "select"
+				},
+				success : function(data) {
+					$("#t").html(data.total)
+					$("#my").empty();
+					console.log(data)
+					var $div = ""
+					$.each(data.list,function(i,n){
+						$div = $div + "<div itemId='"+n.itemId+"'><img width='50px' height='50px' alt='' src='"+n.display_picture+"'> "+n.price+" "+n.feed_tile_text+" <a href='javascript:del(\""+n.itemId+"\")'>删除<a></div>";
+					});
+					$("#my").append($div)
+					alert(data.msg);
+				}
+			});
+		}
+		function prePage(){
+			if(currentPage==1){
+				alert("这是第一页了!");
+			}else{
+				var params = "";
+				var $inputs = $("#t input[type='checkbox']");
+				$.each($inputs,function(i,n){
+					if(n.checked)
+						params = params+n.value+"=1&"
+				});
+				if(params.lastIndexOf("&"))
+					params = params.substring(0,params.length-1)
+				location.href="/wish/wish/selectWishData?currentPage=${currentPage-1}&"+params;
+			}
+		}
+		
+		function nextPage(){
+			var params = "";
+			var $inputs = $("#t input[type='checkbox']");
+			/* for ( var i in $inputs) {
+				var $input = $inputs[i];
+			//	console.log($input.val())
+			alert($input.html())
+				if($input.is(":checked")){
+					params = params + $input.val()+"=1&"
+				}
+			} */
+			console.log($inputs.length)
+			$.each($inputs,function(i,n){
+				if(n.checked)
+					params = params+n.value+"=1&"
+			});
+			if(params.lastIndexOf("&"))
+				params = params.substring(0,params.length-1)
+		//	alert(params);
+		//	alert("/wish/wish/selectWishData?currentPage=${currentPage+1}&"+params);
+			location.href="/wish/wish/selectWishData?currentPage=${currentPage+1}&"+params;
+		}
+		
+		$("#t input[type='checkbox']").on("click", function(){
+			var params = "";
+			var $inputs = $("#t input[type='checkbox']");
+			$.each($inputs,function(i,n){
+				if(n.checked)
+					params = params+n.value+"=1&"
+			});
+			if(params.lastIndexOf("&"))
+				params = params.substring(0,params.length-1)
+			location.href="/wish/wish/selectWishData?currentPage=${currentPage}&"+params;
+		});
+		
+		$("#c input[type='checkbox']").on("click", function(){
+			var $input = $(this);
+			console.log($input.val())
+			if($input.is(":checked")){
+				var itemId = $input.val();
+				var price = $input.closest("div").text();
+				var feed_tile_text = $input.closest("div").next("div").text();
+				var display_picture = $input.closest("div").prev("div").find("img").attr("src");
+				//将选中的数据入库
+				$.ajax({
+						type : "POST",
+						url : "/wish/wish/simpleDataSave",
+						dataType : "json",
+						data : {
+							itemId : itemId,
+							price : price,
+							feed_tile_text : feed_tile_text,
+							display_picture : display_picture,
+							select : 1,
+							search : 0,
+							add : 0
+						},
+						success : function(data) {
+							alert(data.msg);
+							if(data.status=="ok"){
+								var $my = "<div itemId='"+data.id+"'><img width='50px' height='50px' alt='' src='"+display_picture+"'> "+price+" "+feed_tile_text+" <a href='javascript:del(\""+itemId+"\")'>删除<a></div>";
+								$("#my").append($my);
+							}
+						}
+					});
+			}
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>归档列表</title>
+</head>
+<body style="text-align: center;">
+	<div style="margin: 0 auto; height: 1000px; width: 960px;">
+		<div
+			style="height: 60px; border-top: #060 2px solid; margin-top: 10px; border-bottom: #060 2px solid; background-color: #690;">
+			<!-- <a href="/wish/wish/selectWishData">筛选产品</a>     -->
+			<ul style="list-style: none; line-height: 40px; margin-left: 50px;">
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/wishDataList" target="_blank">搜索产品</a></li>
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/add" target="_blank">添加产品</a></li>
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/list" target="_blank">产品管理</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/keyWordsTask" target="_blank">关键词搜索</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/taskList" target="_blank">我的任务列表</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/chicme/chicmeCate" target="_blank">chicme商品</a></li>
+			</ul>
+		</div>
+		<div style="height: 25px;width: 60px;">
+		<select id="isC" onchange="list()">
+						<option value="0" <#if isC==0>selected="selected"</#if>>未归档</option>
+						<option value="1" <#if isC==1>selected="selected"</#if>>已归档</option>
+					</select>
+		</div>
+		<table style="width: 960px;">
+			<thead>
+				<tr>
+					<th width="40">序号</th>
+					<th width="120">图片</th>
+					<th width="400">标题</th>
+					<th width="40">价格</th>
+					<th width="40">销量</th>
+					<th width="40">收藏</th>
+					<th width="120">编辑</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list list as w>
+				<tr>
+					<td>${w_index+1}</td>
+					<td><a href="${w.url}" target="_blank"><img alt="" width="100"
+							height="100" src="${w.mainImgUrl}"></a></td>
+					<td width="400">${w.name}</td>
+					<td>${w.price}</td>
+					<td>${w.saleNum}</td>
+					<td>${w.collNum}</td>
+					<td>
+						<a href="/wish/wish/proDel/${w.itemId}/${currentPage}">删除</a>
+						<#if w.isC==0><a href="/wish/wish/dataC/${w.itemId}/${currentPage}">归档</a></#if>
+						<#if w.isC==1>已归档</#if>
+					</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+		<div>
+			<#if currentPage gt 1> <a
+				href="/wish/wish/list?currentPage=${currentPage-1}">上一页</a> <#else>
+			首页 </#if>
+			<!-- 
+                                	<#if totalPage gt 1>
+                                		跳转到
+                                		<select onchange="jumpPage()" id="jumpPage">
+                                			<#list 1..totalPage as p>
+                                			<option value="${p}" <#if p==currentPage>selected</#if>>${p}</option>
+                                			</#list>
+                                		</select>
+                                		页
+                                	</#if>  -->
+			<#if currentPage lt totalPage> <a
+				href="/wish/wish/list?currentPage=${currentPage+1}">下一页</a> <#else>
+			尾页 </#if> <a href="javascript:dl(1)">全部下载(速卖通版)</a> &nbsp;&nbsp;<a href="javascript:dl(2)">全部下载(wish版)</a> 
+			<#if isC==0>
+			<a
+				href="/wish/wish/proDelAll">全部删除</a> <a
+				href="/wish/wish/dataCAll">全部归档</a>
+			</#if>
+			
+		</div>
+	</div>
+	<script type="text/javascript" src="/wish/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript">
+		function list(){
+			location.href="/wish/wish/list?isC="+$("#isC").val();
+		}
+		function dl(type){
+			location.href="/wish/wish/wishDataDownLoad?isC="+$("#isC").val()+"&type="+type;
+		}
+	</script>
+</body>
+</html>

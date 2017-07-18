@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>关键词搜索</title>
+</head>
+<body style="text-align: center;">
+	<div style="margin:0 auto; height:1000px;width: 960px;">
+		<!-- <div style="border-color: black;height: 30px;border-style: double;">
+			<input type="text" id="search" value="${key}"> <button onclick="search()">搜索</button>
+		</div> -->
+		<div style="border-color: black;border-style: double;">
+			<div style="height:60px;border-top:#060 2px solid;margin-top:10px;border-bottom:#060 2px solid;background-color:#690;">
+				<!-- <a href="/wish/wish/selectWishData">筛选产品</a>     -->
+			<ul style="list-style:none;line-height:40px;margin-left:50px;">
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/wishDataList" target="_blank">搜索产品</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/add" target="_blank">添加产品</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/list" target="_blank">产品管理</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/keyWordsTask" target="_blank">关键词搜索</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/taskList" target="_blank">我的任务列表</a></li>ss
+					<li style="display:block;float:left;margin-left:10px;"><a href="/wish/chicme/chicmeCate" target="_blank">chicme商品</a></li>
+			</ul>
+			</div>
+			<div style="width: 100%;text-align: center;height: 400px">
+				<textarea id="itemIds" rows="20" cols="130"></textarea>
+				<button onclick="add()">提交</button>
+			</div>	
+				
+	<!-- 		<div style="width: 20%;float: right;height: 600px;margin-right: 10px;border-color: black;border-style: double;overflow: auto;">
+				<div id="my">
+					<#list list as temp>
+						<div style="border-bottom-style: dotted;">
+							<img width="50px" height="50px" alt="" src="${temp.display_picture}"> 
+							<span>
+							${temp.price} <br>
+							${temp.feed_tile_text} 
+							</span>
+							<a href="javascript:del('${temp.itemId}')">删除</a>
+						</div>
+					</#list>
+				</div>
+				<div>以选中${list?size}条数据</div>
+				<div><a href="">WISH下载</a>	SKT下载  全部下载</div>
+			</div> -->
+		</div>
+	</div>
+	<script type="text/javascript" src="/wish/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/wish/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript">
+	if("{msg}"!=""){
+		alert("${msg}")
+	}
+	function del(itemId){
+		$.ajax({
+			type : "GET",
+			url : "/wish/wish/simpleDataDel/"+itemId,
+			dataType : "json",
+			data : {
+				type : "add"
+			},
+			success : function(data) {
+				$("#t").html(data.total)
+				$("#my").empty();
+				var $div = ""
+				$.each(data.list,function(i,n){
+					$div = $div + "<div itemId='"+data.itemId+"'><img width='50px' height='50px' alt='' src='"+data.display_picture+"'> "+data.price+" "+data.feed_tile_text+" <a href='javascript:del(\""+data.itemId+"\")'>删除<a></div>";
+				});
+				$("#my").append($div)
+				alert(data.msg);
+			}
+		});
+	}
+	  function StandardPost (url,args)  
+	    {  
+	        var myForm = document.createElement("form");  
+	        myForm.method = "post";  
+	        myForm.action = url;  
+	        for ( var k in args) {  
+	            var myInput = document.createElement("input");  
+	            myInput.setAttribute("name", k);  
+	            myInput.setAttribute("value", args[k]);  
+	            myForm.appendChild(myInput);  
+	        }  
+	        document.body.appendChild(myForm);  
+	        myForm.submit();  
+	        document.body.removeChild(myForm);  
+	    }  
+	
+		function add(){
+			console.log($("#itemIds").val().split("\n"))
+			if($("#itemIds").val()==""){
+				alert("请填写你要添加的 ID");
+				return false;
+			}else{
+				StandardPost("/wish/wish/add", {itemIds : $("#itemIds").val().split("\n")});
+			}
+			
+			/* $.ajax({
+				type : "POST",
+				url : "/wish/wish/add",
+				dataType : "json",
+				data : {
+					itemIds : $("#itemIds").val().split("\n")
+				},
+				success : function(data) {
+					alert(data.msg);
+				}
+			}); */
+		}	
+	</script>
+</body>
+</html>

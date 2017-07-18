@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>我的任务列表</title>
+<style type="text/css">
+#cate a{
+	text-decoration:none;
+	background-color: white;
+	padding: 1px;
+}
+</style>
+</head>
+<body>
+	<div style="margin: 0 auto; width: 960px;">
+		<div
+			style="height: 60px; border-top: #060 2px solid; margin-top: 10px; border-bottom: #060 2px solid; background-color: #690;">
+			<!-- <a href="/wish/wish/selectWishData">筛选产品</a>     -->
+			<ul style="list-style: none; line-height: 40px; margin-left: 50px;">
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/wishDataList" target="_blank">搜索产品</a></li>
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/add" target="_blank">添加产品</a></li>
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/list" target="_blank">产品管理</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/keyWordsTask" target="_blank">关键词搜索</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/taskList" target="_blank">我的任务列表</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/chicme/chicmeCate" target="_blank">chicme商品</a></li>
+			</ul>
+		</div>
+		<div>
+			<#list categories as cate>
+				<div style="padding-top: 10px;">
+					<div  style="color: red;height: 30px;">${cate.name}</div>
+					<div id="cate">
+						<#list cate.list as c>
+							<span style="background-color: #AAAAAA;padding: 1px;height: 60px;">
+							<a href="/wish/chicme/chicmeList?category=${c.name}">
+								${c.name}
+							</a>
+							</span>
+							<span style="width: 40px;"></span>
+						</#list>
+					</div>
+				</div>
+			</#list>
+		</div>
+	</div>
+	<script type="text/javascript" src="/wish/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript">
+	</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>我的任务列表</title>
+</head>
+<body style="text-align: center;">
+	<div style="margin: 0 auto; height: 1000px; width: 960px;">
+		<div
+			style="height: 60px; border-top: #060 2px solid; margin-top: 10px; border-bottom: #060 2px solid; background-color: #690;">
+			<!-- <a href="/wish/wish/selectWishData">筛选产品</a>     -->
+			<ul style="list-style: none; line-height: 40px; margin-left: 50px;">
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/wishDataList" target="_blank">搜索产品</a></li>
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/add" target="_blank">添加产品</a></li>
+				<li style="display: block; float: left; margin-left: 10px;"><a
+					href="/wish/wish/list" target="_blank">产品管理</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/keyWordsTask" target="_blank">关键词搜索</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/wish/taskList" target="_blank">我的任务列表</a></li>
+				<li style="display:block;float:left;margin-left:10px;"><a href="/wish/chicme/chicmeCate" target="_blank">chicme商品</a></li>
+			</ul>
+		</div>
+		<div>
+			<a href="/wish/wish/taskDataList/${t.id}" target="_blank">${t.key}</a>
+		</div>
+		<table style="width: 960px;">
+			<thead>
+				<tr>
+					<th width="100">序号</th>
+					<th width="100">关键词</th>
+					<th width="100">状态</th>
+					<th width="100">时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list list as t>
+				<tr>
+					<td>${t_index+1}</td>
+					<td><a href="/wish/wish/taskDataList/${t.id}" target="_blank">${t.key}</a></td>
+					<td>
+						<#if t.isS==1>已结束</#if>
+						<#if t.isS==0>采集中</#if>
+					</td>
+					<td>${t.time}</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+		<div>
+			<#if currentPage gt 1> <a
+				href="/wish/wish/taskList?currentPage=${currentPage-1}">上一页</a> <#else>
+			首页 </#if>
+			<!-- 
+                                	<#if totalPage gt 1>
+                                		跳转到
+                                		<select onchange="jumpPage()" id="jumpPage">
+                                			<#list 1..totalPage as p>
+                                			<option value="${p}" <#if p==currentPage>selected</#if>>${p}</option>
+                                			</#list>
+                                		</select>
+                                		页
+                                	</#if>  -->
+			<#if currentPage lt totalPage> <a
+				href="/wish/wish/taskList?currentPage=${currentPage+1}">下一页</a> <#else>
+			尾页 </#if> 
+		</div>
+	</div>
+	<script type="text/javascript" src="/wish/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript">
+	</script>
+</body>
+</html>
